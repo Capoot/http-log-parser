@@ -9,9 +9,10 @@ public class ImmutableHttpRequest {
     private final String path;
     private final byte[] entity;
     private final QueryParams queryParams;
+    private final Headers headers;
 
     public ImmutableHttpRequest(RequestMethod method, String path, HashMap<String, List<String>> queryParams,
-            byte[] entity) {
+            HashMap<String, List<String>> headers, byte[] entity) {
 
         if(method == null) {
             throw new IllegalArgumentException("method must not be null");
@@ -28,6 +29,7 @@ public class ImmutableHttpRequest {
         this.entity = entity;
 
         this.queryParams = new QueryParams(queryParams);
+        this.headers = new Headers(headers);
     }
 
     public String getPath() {
@@ -39,7 +41,7 @@ public class ImmutableHttpRequest {
     }
 
     public Headers getHeaders() {
-        throw new RuntimeException("todo");
+        return headers;
     }
 
     public RequestMethod getMethod() {

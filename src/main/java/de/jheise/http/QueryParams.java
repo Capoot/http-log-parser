@@ -1,33 +1,32 @@
 package de.jheise.http;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static de.jheise.util.CollectionUtil.deepCopy;
 
 public class QueryParams {
 
     private final Map<String, List<String>> params;
 
     public QueryParams(HashMap<String, List<String>> queryParams) {
-        params = deepCopy(queryParams);
-    }
 
-    private Map<String, List<String>> deepCopy(HashMap<String, List<String>> queryParams) {
-
-        Map<String, List<String>> params = new HashMap<>();
-        for(String key : queryParams.keySet()) {
-            List<String> origin = queryParams.get(key);
-            List<String> destination = new ArrayList<>(origin.size());
-            destination.addAll(origin);
-            params.put(key, Collections.unmodifiableList(destination));
+        if(queryParams == null || queryParams.isEmpty()) {
+            params = Collections.unmodifiableMap(Collections.EMPTY_MAP);
+            return;
         }
-        return Collections.unmodifiableMap(params);
+
+        params = deepCopy(queryParams);
     }
 
     public int size() {
         return params.size();
     }
 
-    public List<String> get(String key) {
+    public List<String> getValues(String key) {
         return params.get(key);
+    }
+
+    public boolean isMultiValued(String key) {
+        return params.containsKey(key) && params.get(key).size() > 1;
     }
 }
